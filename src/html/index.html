@@ -2,13 +2,15 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>用户画像</title>
     <link rel="stylesheet" href="../assets/bootstrap-3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" href="../assets/bootstrap-select/bootstrap-select.min.css">
     <link rel="stylesheet" href="../assets/laydate/theme/default/laydate.css">
+    <link rel="stylesheet" href="../css/main.min.css">
 
-    <link rel="stylesheet/less" href="../css/main.less" type="text/css">
-    <script src="../assets/less/less.min.js"></script>
+    <!--<link rel="stylesheet/less" href="../css/main.less" type="text/css">-->
+    <!--<script src="../assets/less/less.min.js"></script>-->
 </head>
 <body>
 <header class="navbar navbar-static-top header" id="top">
@@ -109,10 +111,62 @@
                 </div>
             </div>
         </div>
-        <div class="gender" id="gender"></div>
-        <div class="age" id="age"></div>
-        <div class="area" id="area"></div>
-        <div class="distribute" id="distribute"></div>
+        <div class="gender box" id="gender">
+            <div class="title">性别比例</div>
+            <div class="row chart-wrap">
+                <div class="col-md-4">
+                    <div class="chart-circle" id="chart_gender_self"></div>
+                    <div class="circle">
+                        <div class="dot red"></div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="chart-circle" id="chart_gender_compete"></div>
+                    <div class="circle">
+                        <div class="dot"></div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="chart-circle" id="chart_gender_dapan"></div>
+                    <div class="circle">
+                        <div class="dot green"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="age box" id="age">
+            <div class="title">年龄比例</div>
+            <div class="row chart-wrap">
+                <div class="col-md-8">
+                    <div class="chart-h300" id="chart_age_one"></div>
+                </div>
+                <div class="col-md-4">
+                    <div class="chart-circle" id="chart_age_dapan"></div>
+                    <div class="circle small">
+                        <div class="dot green"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="area box" id="area">
+            <div class="title">地域</div>
+            <div class="chart-wrap">
+                <div class="chart-china" id="chart_china"></div>
+            </div>
+        </div>
+        <div class="distribute box" id="distribute">
+            <div class="title">职业分布</div>
+            <div class="row chart-wrap">
+                <div class="col-md-4">
+                    <div class="chart-circle" id="work_self"></div>
+                    <div class="circle">
+                        <div class="dot green"></div>
+                    </div>
+                </div>
+                <div class="col-md-4"><div class="chart-circle" id="work_compete"></div></div>
+                <div class="col-md-4"><div class="chart-circle" id="work_dapan"></div></div>
+            </div>
+        </div>
         <div class="incomeLevel" id="incomeLevel"></div>
         <div class="purpose" id="purpose"></div>
     </div>
@@ -122,6 +176,8 @@
 <script src="../assets/bootstrap-3.3.7/js/bootstrap.min.js"></script>
 <script src="../assets/bootstrap-select/bootstrap-select.min.js"></script>
 <script src="../assets/laydate/laydate.js"></script>
+<script src="../assets/echarts/echarts-all-3.js"></script>
+<script src="../assets/echarts/china.js"></script>
 <script src="../js/index.js"></script>
 </body>
 </html>
