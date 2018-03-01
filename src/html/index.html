@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="../assets/bootstrap-3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" href="../assets/bootstrap-select/bootstrap-select.min.css">
     <link rel="stylesheet" href="../assets/laydate/theme/default/laydate.css">
-    <link rel="stylesheet" href="../css/main.min.css">
+    <link rel="stylesheet" href="../css/main.css">
 
     <!--<link rel="stylesheet/less" href="../css/main.less" type="text/css">-->
     <!--<script src="../assets/less/less.min.js"></script>-->
@@ -20,7 +20,9 @@
     <nav class="collapse navbar-collapse">
         <ul class="nav navbar-nav top-nav">
             <li>
-                <a href="javascript:;" >舆情管理</a>
+                <a href="javascript:;" >
+                    舆情管理
+                </a>
             </li>
             <li>
                 <a href="javascript:;">产品管理</a>
@@ -72,7 +74,7 @@
     <div class="part-right">
         <div class="select-box" id="overview">
             <div class="row">
-                <div class="col-md-1 text-right col-md-offset-"><label for="self_modal">选择本品</label></div>
+                <div class="col-md-1 text-right label-box"><label for="self_modal">选择本品</label></div>
                 <div class="col-md-2">
                     <select id="self_modal" class="selectpicker">
                         <option value="1">本品-雅阁</option>
@@ -81,7 +83,7 @@
                         <option value="1">本品-捷达</option>
                     </select>
                 </div>
-                <div class="col-md-1 text-right"><label for="compete_modal">选择竞品</label></div>
+                <div class="col-md-1 text-right label-box"><label for="compete_modal">选择竞品</label></div>
                 <div class="col-md-2">
                     <select class="selectpicker" id="compete_modal">
                         <option value="1">竞品-新桑塔纳</option>
@@ -89,8 +91,8 @@
                         <option value="3">竞品-明锐</option>
                     </select>
                 </div>
-                <div class="col-md-1 text-right"><label for="beginDate">选择时间</label></div>
-                <div class="col-md-4">
+                <div class="col-md-1 text-right label-box"><label for="beginDate">选择时间</label></div>
+                <div class="col-md-5">
                     <div class="bootstrap-select mrR5">
                         <input type="text" class="form-control" id="beginDate">
                     </div>
@@ -99,9 +101,7 @@
                     </div>
                     <label for="beginDate" class="calendar-box glyphicon glyphicon-calendar"></label>
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-md-1 text-right col-md-offset-"><label for="select_type">选择大盘</label></div>
+                <div class="col-md-1 text-right label-box"><label for="select_type">选择大盘</label></div>
                 <div class="col-md-4">
                     <select id="select_type" class="selectpicker mrR5 small">
                         <option value="1">国别</option>
@@ -150,8 +150,30 @@
         </div>
         <div class="area box" id="area">
             <div class="title">地域</div>
-            <div class="chart-wrap">
-                <div class="chart-china" id="chart_china"></div>
+            <div class="chart-wrap row">
+                <div class="col-md-12">
+                    <div class="chart-china" id="chart_china"></div>
+                </div>
+            </div>
+            <div class="type-box" id="china_type_box">
+                <a href="javascript:;" class="self">
+                    <i class="circle"></i>
+                    本品分布
+                    <i class="border-bottom-left"></i>
+                    <i class="border-bottom-right"></i>
+                </a>
+                <a href="javascript:;" class="compete disabled">
+                    <i class="circle"></i>
+                    竞品分布
+                    <i class="border-bottom-left"></i>
+                    <i class="border-bottom-right"></i>
+                </a>
+                <a href="javascript:;" class="dapan disabled">
+                    <i class="circle"></i>
+                    大盘分布
+                    <i class="border-bottom-left"></i>
+                    <i class="border-bottom-right"></i>
+                </a>
             </div>
         </div>
         <div class="distribute box" id="distribute">
@@ -163,12 +185,58 @@
                         <div class="dot green"></div>
                     </div>
                 </div>
-                <div class="col-md-4"><div class="chart-circle" id="work_compete"></div></div>
-                <div class="col-md-4"><div class="chart-circle" id="work_dapan"></div></div>
+                <div class="col-md-4">
+                    <div class="chart-circle" id="work_compete"></div>
+                    <div class="circle">
+                        <div class="dot green"></div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="chart-circle" id="work_dapan"></div>
+                    <div class="circle">
+                        <div class="dot green"></div>
+                    </div>
+                </div>
             </div>
         </div>
-        <div class="incomeLevel" id="incomeLevel"></div>
-        <div class="purpose" id="purpose"></div>
+        <div class="incomeLevel box" id="incomeLevel">
+            <div class="title">收入层次</div>
+            <div class="row chart-wrap">
+                <div class="col-md-8">
+                    <div class="chart-h300" id="chart_income_one"></div>
+                </div>
+                <div class="col-md-4">
+                    <div class="chart-circle" id="chart_income_dapan"></div>
+                    <div class="circle small">
+                        <div class="dot green"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="purpose box" id="purpose">
+            <div class="title">购车目的</div>
+            <div class="row chart-wrap">
+                <div class="col-md-4">
+                    <div class="chart-circle" id="purpose_self"></div>
+                    <div class="circle">
+                        <div class="dot green"></div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="chart-circle" id="purpose_compete"></div>
+                    <div class="circle">
+                        <div class="dot green"></div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="chart-circle" id="purpose_dapan"></div>
+                    <div class="circle">
+                        <div class="dot green"></div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
     </div>
 </div>
 

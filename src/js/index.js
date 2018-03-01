@@ -192,10 +192,53 @@ $(function () {
     var ageDapan = echarts.init(document.getElementById('chart_age_dapan'));
     ageDapan.setOption(genderDapanOpt);
 
+    var incomeDapan = echarts.init(document.getElementById('chart_income_dapan'));
+    incomeDapan.setOption(genderDapanOpt);
+
     initAgePercent();
-    initChinaMap();
+    initChinaMap('self');
     initWorkMap();
+    initEvents();
+    initSCroll();
 });
+
+function initEvents() {
+    $('#china_type_box a').click(function () {
+        var $this = $(this);
+        $this.removeClass('disabled').siblings().addClass('disabled');
+        if($this.hasClass('self')){
+            initChinaMap('self')
+        }else if($this.hasClass('compete')){
+            initChinaMap('compete');
+        }else {
+            initChinaMap('dapan');
+        }
+    });
+
+    var _popover = "<div class='car-popover operate-box small'> " +
+        "<ul class='popover-ul'>" +
+        "<li><i class='icon icon-red'></i>小于10万: 8%</li>"+
+        "<li><i class='icon icon-green'></i>10-15万: 20%</li>"+
+        "<li><i class='icon icon-blue'></i>15-20万: 43%</li>"+
+        "<li><i class='icon icon-orange'></i>20-25万: 13%</li>"+
+        "<li><i class='icon icon-yellow'></i>25-30万: 23%</li>"+
+        "</ul>"+
+        "</div>";
+
+    $('.dot').on({
+        'mouseenter': function () {
+            var _this = $(this);
+            _this.popover({
+                placement: 'top',
+                html: true,
+                content: _popover
+            }).popover('show');
+        },
+        'mouseleave': function () {
+            $(this).popover('hide');
+        }
+    });
+}
 
 function getCountry() {
     return ['美国', '加拿大', '中国', '韩国', '日本', '印度', '英国', '德国', '法国'];
@@ -338,283 +381,138 @@ function initAgePercent() {
 
    var ageChart = echarts.init(document.getElementById('chart_age_one'));
     ageChart.setOption(option);
+
+    var incomeChart = echarts.init(document.getElementById('chart_income_one'));
+    incomeChart.setOption(option);
 }
 
-function  initChinaMap() {
-    var geoCoordMap = {
-        '北京': [116.395645, 39.929986],
-        '天津': [117.210813, 39.14393],
-        '上海': [121.4788,31.2303],
-        '重庆': [106.55,29.5647],
-        '河北': [114.522082,38.048958],
-        '河南': [113.649644,34.75661],
-        '云南': [102.714601,24.882],
-        '辽宁': [123.432791,41.808645],
-        '黑龙江': [126.657717,45.773225],
-        '湖南': [112.979353,28.213478],
-        '安徽': [117.282699,31.866942],
-        '山东': [117.024967,36.682785],
-        '新疆': [87.564988,43.84038],
-        '江苏': [118.778074,32.057236],
-        '浙江': [120.219375,30.259244],
-        '江西': [115.893528,28.689578],
-        '湖北': [114.3162,30.581084],
-        '广西': [108.297234,22.806493],
-        '甘肃': [103.823305,36.064226],
-        '山西': [112.550864,37.890277],
-        '内蒙古': [111.660351,40.828319],
-        '陕西': [108.939,34.342],
-        '吉林': [125.3222,43.816],
-        '福建': [119.330221,26.047125],
-        '贵州': [106.709177,26.629907],
-        '广东': [113.30765,23.120049],
-        '青海': [101.767921,36.640739],
-        '西藏': [91.111891,29.662557],
-        '四川': [104.0648,30.57],
-        '宁夏': [106.206479,38.502621],
-        '海南': [110.330802,20.022071],
-        '台湾': [121.31, 25.03],
-        '香港': [114.1529,22.542716],
-        '澳门': [113.417008,22.337477]
-    };
-    function getgeo(geo,i){
-        if(i%2==0){
-            return [geo[0] + (0.2 * i%2), geo[1]];
-        }else{
-            return [geo[0] , geo[1] - (0.3 * i%2)];
-        }
-    }
-
-    function convertData(datas) {
-        var res = [];
-        for (var g in geoCoordMap) {
-            var geo = geoCoordMap[g];
-            if (geo) {
-                var data = $.grep(datas, function(p) {
-                    return p.name == g && p.value!=null;
-                });
-                for (var i in data) {
-                    if (data[i]) {
-                        res.push({
-                            name:data[i].name,
-                            value: getgeo(geo,i),
-                            state: data[i].value,
-                            operate: data[i].operate,
-                            prepare: data[i].prepare
-                        });
-                    }
-                }
-            }
-        }
-        return res;
-    };
-
-    var data = [{
-        "name": "北京",
-        "ID": 9,
-        "value": 22
-    },{
-        "name": "湖南",
-        "ID": 21,
-        "value": 2,
-        "operate": 4,
-        "prepare": 6
-    }, {
-        "name": "深圳",
-        "ID": 42,
-        "value": 2,
-        "operate": 5,
-        "prepare": 2
-    }, {
-        "name": "河北",
-        "ID": 43,
-        "value": 2,
-        "operate": 2,
-        "prepare": 6
-    }, {
-        "name": "上海",
-        "ID": 44,
-        "value": 2
-    }, {
-        "name": "河南",
-        "ID": 46,
-        "value": 2,
-        "operate": 0,
-        "prepare": 1
-    },  {
-        "name": "宁夏",
-        "ID": 55,
-        "value": 2,
-        "operate": 0,
-        "prepare": 1
-    }, {
-        "name": "湖北",
-        "ID": 73,
-        "value": 2,
-        "operate": 2,
-        "prepare": 3
-    },  {
-        "name": "浙江",
-        "ID": 87,
-        "value": 2,
-        "operate": 3,
-        "prepare": 4
-    }, {
-        "name": "山西",
-        "ID": 100,
-        "value": 2,
-        "operate": 0,
-        "prepare": 1
-    }, {
-        "name": "黑龙江",
-        "ID": 102,
-        "value": 2,
-        "operate": 0,
-        "prepare": 0
-    }, {
-        "name": "新疆",
-        "ID": 140,
-        "value": 7,
-        "operate": 0,
-        "prepare": 0
-    }, {
-        "name": "江苏",
-        "ID": 141,
-        "value": 5,
-        "operate": 1,
-        "prepare": 2
-    },  {
-        "name": "西藏",
-        "ID": 155,
-        "value": 7,
-        "operate": 0,
-        "prepare": 0
-    }, {
-        "name": "四川",
-        "ID": 156,
-        "value": 8,
-        "operate": 1,
-        "prepare": 2
-    },{
-        "name": "海南",
-        "ID": 158,
-        "value": 1,
-        "operate": 2,
-        "prepare": 3
-    }, {
-        "name": "台湾",
-        "ID": 159,
-        "value": 2,
-        "operate": 4,
-        "prepare": 5
-    }, {
-        "name": "香港",
-        "ID": 160,
-        "value": 3,
-        "operate": 2,
-        "prepare": 3
-    }];
-
-    var chinaOption = {
-        tooltip:{
+function initChinaMap(flag) {
+    var color = flag == 'self'? '#fff100' : (flag=='compete' ? '#ff4873' : '#2cffc1');
+    var option = {
+        tooltip: {
             trigger: 'item',
             formatter: function (val) {
-                console.log(val)
-                var text = '';
-                return text;
-            }
-        },
-        legend: {
-            orient: 'vertical',
-            right: '8%',
-            top: '40%',
-            textStyle:{
-              fontSize: 16
-            },
-            padding: [10, 20],
-            borderWidth: 1,
-            borderColor: '#00ffff',
-            borderRadius: 5,
-            data:[
-                {
-                    name:'本品分布',
-                    textStyle:{
-                        color:'#fff100'
-                    }
-                },
-                {
-                    name:'竞品分布',
-                    textStyle:{
-                        color:'#ff4873'
-                    }
-                },
-                {
-                    name: '大盘分布',
-                    textStyle:{
-                        color: '#2cffc1'
-                    }
-                }
-            ]
-        },
-        geo: {
-            map: 'china',
-            roam: false,
-            itemStyle: {
-                normal: {
-                    borderColor: '#00ffff',
-                    areaColor: '#212638'
+                if(!isNaN(val.value)){
+                    getTooltip(val, color);
                 }
             },
-            label: {
-                emphasis: {
-                    show: true,
-                    fontSize: 18,
-                    color: '#fff'
-                }
+            backgroundColor: new echarts.graphic.LinearGradient(0,0,0,1, [{
+                offset: 0, color: 'rgba(255,241,0,.8)'
+            },{
+                offset: 0.5, color: 'rgba(255,241,0,.4)'
+            },{
+                offset: 1, color: 'rgba(255,241,0,.2)'
+            }])
+        },
+        grid:{
+            left: '15%'
+        },
+        visualMap: {
+            min:0,
+            max: 18000,
+            left: '8%',
+            top: 'bottom',
+            text: ['高', '低'],
+            calculable: true,
+            inRange: {
+                color: ['#7ff9fe', '#5fc0ec', '#4496d8', '#2e83c4','#247bb9']
+            },
+            textStyle: {
+                color: '#fff'
             }
         },
         series: [{
-            name: '本品分布',
-            type: 'scatter',
-            coordinateSystem: 'geo',
-            symbolSize: 20,
-            data: convertData(data).slice(0,5),
-            itemStyle: {
-                normal:{
-                    color: '#fff100'
+            name: '本品雅阁',
+            type: 'map',
+            mapType: 'china',
+            label: {
+                normal: {
+                    show: false
+                },
+                emphasis: {
+                    show: false
                 }
-            }
-        },{
-            name: '竞品分布',
-            type: 'scatter',
-            coordinateSystem: 'geo',
-            symbolSize: 20,
-            data: convertData(data.sort(function (a, b) {
-                return b.value - a.value;
-            }).slice(5, 10)),
-            itemStyle: {
+            },
+            itemStyle:{
                 normal:{
-                    color: '#ff4873'
+                    areaColor: '#2b2f3f',
+                    borderColor: '#00ffff',
+                    borderWidth: 1.5
                 }
-            }
-        },{
-            name: '大盘分布',
-            type: 'scatter',
-            coordinateSystem: 'geo',
-            symbolSize: 20,
-            data: convertData(data.sort(function (a, b) {
-                return b.value - a.value;
-            }).slice(11, 18)),
-            itemStyle: {
-                normal:{
-                    color: '#2cffc1'
-                }
-            }
-        }]
+            },
+            data: [{
+                name: '北京',
+                value: 18331
+            }, {
+                name: '天津',
+                value: 11716
+            }, {
+                name: '上海',
+                value: 13840
+            }, {
+                name: '重庆',
+                value: 11425
+            }, {
+                name: '河北',
+                value: 7136
+            }, {
+                name: '河南',
+                value: 9245
+            }, {
+                name: '云南',
+                value: 9191
+            }, {
+                name: '辽宁',
+                value: 7331
+            }, {
+                name: '黑龙江',
+                value: 8291
+            }, {
+                name: '湖南',
+                value: 1259
+            }, {
+                name: '安徽',
+                value: 10289
+            }, {
+                name: '山东',
+                value: 2606
+            }, {
+                name: '新疆',
+                value: 7985
+            }, {
+                name: '江苏',
+                value: 3803
+            }, {
+                name: '浙江',
+                value: 10726
+            }, {
+                name: '四川',
+                value: 12457
+            }]
+        }
+        ]
     };
 
-    var map = echarts.init(document.getElementById('chart_china'));
-    map.setOption(chinaOption);
+    if(flag == 'self'){
+        option.series[0].name = '本品雅阁';
+        option.series[0].itemStyle.normal.borderColor = '#00ffff';
+        option.visualMap.inRange.color = ['#7ff9fe', '#5fc0ec', '#4496d8', '#2e83c4','#247bb9'];
+    }else if(flag == 'compete'){
+        option.series[0].name = '竞品帕萨特';
+        option.series[0].itemStyle.normal.borderColor = '#ff4873';
+        option.visualMap.inRange.color =  ['#fe4873', '#e13c63', '#c02f52', '#a42442', '#941e3a'];
+    }else{
+        option.series[0].name = '大盘';
+        option.series[0].itemStyle.normal.borderColor = '#2cffc1';
+        option.visualMap.inRange.color =  ['#2cfdc0', '#24e1aa', '#1ac091', '#12a17b', '#0c8f6c'];
+    }
+
+    var chart = echarts.init(document.getElementById('chart_china'));
+    chart.setOption(option, true);
+}
+
+function getTooltip(val, color) {
+    return '<div style="display: block;color: ' + color + ';">' + val.seriesName + '在' + val.name + '的车主人数是:' + val.value + '</div>'
 }
 
 function initWorkMap() {
@@ -712,219 +610,37 @@ function initWorkMap() {
 
     var genderSelf = echarts.init(document.getElementById('work_self'));
     genderSelf.setOption(genderSelfOpt);
-return
-    var genderCompeteOpt =  {
-        title: {
-            text: '竞品',
-            subtext: '(日产天籁购车用户比例)',
-            x: 'center',
-            y: '38%',
-            textStyle: {
-                fontWeight: 'normal',
-                fontSize: 30,
-                color: '#13cff0'
-            },
-            subtextStyle: {
-                color: '#13cff0'
-            }
-        },
-        tooltip : {
-            trigger: 'item',
-            formatter: "{a} <br/>{b} : {c} ({d}%)"
-        },
-        calculable : true,
-        series : [
-            {
-                type:'pie',
-                radius : ['53%', '63%'],
-                center: ['50%', '50%'],
-                label: {
-                    normal: {
-                        show: false
-                    }
-                },
-                data:[
-                    {
-                        value:40, name:'女',
-                        itemStyle: {
-                            normal:{
-                                color: '#fce648'
-                            }
-                        }
-                    },
-                    {
-                        value: 60, name:'男',
-                        itemStyle: {
-                            normal:{
-                                color: '#00b7cd'
-                            }
-                        }
-                    }
-                ]
-            },{
-                type:'pie',
-                radius : ['73%', '74%'],
-                center: ['50%', '50%'],
-                label: {
-                    normal:{
-                        formatter: '{b|{b}：}{per|{d}%}',
-                        borderWidth: 1,
-                        borderRadius: 4,
-                        padding: [3, 5],
-                        rich: {
 
-                        }
-                    }
-                },
-                data:[
-                    {
-                        value:40, name:'女',
-                        itemStyle: {
-                            normal:{
-                                color: '#fce648',
-                                labelLine: {
-                                    length: 1,
-                                    length2: 1,
-                                    smooth: true
-                                }
-                            }
-                        },
-                        label: {
-                            normal:{
-                                backgroundColor: 'rgba(252,230,72,.3)'
-                            }
-                        }
-                    },
-                    {
-                        value: 60, name:'男',
-                        itemStyle: {
-                            normal:{
-                                color: '#00b7cd',
-                                labelLine: {
-                                    length: 1,
-                                    length2: 0
-                                }
-                            }
-                        },
-                        label: {
-                            normal:{
-                                backgroundColor: 'rgba(0,183,205,.3)'
-                            }
-                        }
-                    }
-                ]
-            }
-        ]
-    };
+    var genderCom = echarts.init(document.getElementById('work_compete'));
+    genderCom.setOption(genderSelfOpt);
 
-    var genderCompete = echarts.init(document.getElementById('chart_gender_compete'));
-    genderCompete.setOption(genderCompeteOpt);
+    var genderDapan = echarts.init(document.getElementById('work_dapan'));
+    genderDapan.setOption(genderSelfOpt);
 
-    var genderDapanOpt =  {
-        title: {
-            text: '大盘',
-            subtext: '(全部购车用户男女比例)',
-            x: 'center',
-            y: '38%',
-            textStyle: {
-                fontWeight: 'normal',
-                fontSize: 30,
-                color: '#13cff0'
-            },
-            subtextStyle: {
-                color: '#13cff0'
-            }
-        },
-        tooltip : {
-            trigger: 'item',
-            formatter: "{a} <br/>{b} : {c} ({d}%)"
-        },
-        calculable : true,
-        series : [
-            {
-                type:'pie',
-                radius : ['53%', '63%'],
-                center: ['50%', '50%'],
-                label: {
-                    normal: {
-                        show: false
-                    }
-                },
-                data:[
-                    {
-                        value:40, name:'女',
-                        itemStyle: {
-                            normal:{
-                                color: '#2cffc1'
-                            }
-                        }
-                    },
-                    {
-                        value: 60, name:'男',
-                        itemStyle: {
-                            normal:{
-                                color: '#00b7cd'
-                            }
-                        }
-                    }
-                ]
-            },{
-                type:'pie',
-                radius : ['73%', '74%'],
-                center: ['50%', '50%'],
-                label: {
-                    normal:{
-                        formatter: '{b|{b}：}{per|{d}%}',
-                        borderWidth: 1,
-                        borderRadius: 4,
-                        padding: [3, 5],
-                        rich: {
+    var purposeSelf = echarts.init(document.getElementById('purpose_self'));
+    purposeSelf.setOption(genderSelfOpt);
+    var purposeCom = echarts.init(document.getElementById('purpose_compete'));
+    purposeCom.setOption(genderSelfOpt);
+    var purposeDapan = echarts.init(document.getElementById('purpose_dapan'));
+    purposeDapan.setOption(genderSelfOpt);
+}
 
-                        }
-                    }
-                },
-                data:[
-                    {
-                        value:40,
-                        name:'女',
-                        itemStyle: {
-                            normal:{
-                                color: '#2cffc1',
-                                labelLine: {
-                                    length: 1,
-                                    length2: 1,
-                                    smooth: true
-                                }
-                            }
-                        },
-                        label: {
-                            normal:{
-                                backgroundColor: 'rgba(44,255,193,.3)'
-                            }
-                        }
-                    },
-                    {
-                        value: 60,
-                        name:'男',
-                        itemStyle: {
-                            normal:{
-                                color: '#00b7cd',
-                                labelLine: {
-                                    length: 1,
-                                    length2: 0
-                                }
-                            }
-                        },
-                        label: {
-                            normal:{
-                                backgroundColor: 'rgba(0,183,205,.3)'
-                            }
-                        }
-                    }
-                ]
-            }
-        ]
-    };
-    var genderDapan = echarts.init(document.getElementById('chart_gender_dapan'));
-    genderDapan.setOption(genderDapanOpt);
+function initSCroll() {
+
+    $('.part-right').scroll(function () {
+        var $box = $('.box:first'), $select = $('.select-box');
+        var top = $box.offset().top,
+            width = $box.width()-28,  //-左右padding距离+border宽度
+            $label = $select.find('.label-box');
+
+        if(top <= -100 && !$select.hasClass('fixed')){
+            $label.hide();
+            $select.find('.col-md-5').removeClass('col-md-5').addClass('col-md-4');
+            $select.width(width).addClass('fixed');
+        }else if(top >= -100 && $select.hasClass('fixed')){
+            $label.show();
+            $select.find('.col-md-4').addClass('col-md-5').removeClass('col-md-4');
+            $select.width(width).removeClass('fixed');
+        }
+    });
 }
